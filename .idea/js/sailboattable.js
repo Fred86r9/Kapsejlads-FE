@@ -1,49 +1,86 @@
-import {fetchAnyUrl} from "../module/modulejson.js"
+import {fetchAnyUrl, crudSailboat, postObjectAsJson} from "../module/modulejson.js";
 
-console.log("I'm in sailboattable")
+const sailboatsListUrl = 'http://localhost:8080/allboats'
+const tableSailboats = document.getElementById("tblSailboats");
 
-const urlAllSailboats = 'http://localhost:8080/allsailboats'
+const url = "http://localhost:8080/sailboat"
 
-const tblSailboats = document.getElementById("tblSailboats")
 
-function createTable(sailboat)
+function createRow(sailboat)
 {
     let cellCount = 0
-    let rowCount = tblSailboats.rows.length
+    let rowCount = tableSailboats.rows.length;
 
-    let row = tblSailboats.insertRow(rowCount)
+    let row = tableSailboats.insertRow(rowCount);
+    row.id = sailboat.id;
 
-    let cell = row.insertCell(cellCount++)
-    cell.innerHTML = sailboat.id
+    let cell = row.insertCell(cellCount++);
+    cell.innerHTML = sailboat.id;
 
-    cell = row.insertCell(cellCount++)
-    cell.innerHTML = sailboat.boatType
+    cell = row.insertCell(cellCount++);
+    cell.innerHTML = sailboat.boatType;
+
+    cell = row.insertCell(cellCount++);
+    const pbDelete = document.createElement("input");
+    pbDelete.type = "button";
+    pbDelete.setAttribute("value", "Delete sailboat");
+    pbDelete.className = "deletebtn"
+
+    pbDelete.onclick = function()
+    {
+        document.getElementById(sailboat.id).remove();
+        deleteSailboat(sailboat);
+    }
+    cell.appendChild(pbDelete)
+
+    cell = row.insertCell(cellCount++);
+    const pbEdit = document.createElement("input");
+    pbEdit.type = "button";
+    pbEdit.setAttribute("value", "Edit sailboat");
+    pbEdit.className = "editbtn";
+
+    pbEdit.onclick = function () {
+        const newBoatType = window.prompt("Enter new boat type:", sailboat.boatType);
+
+        if (newBoatType !== null) {
+            sailboat.boatType = newBoatType;
+            cell = row.cells[1];
+            cell.innerHTML = newBoatType;
+
+            const putUrl = url + "/" + sailboat.id
+
+            postObjectAsJson(putUrl, sailboat, "PUT")
+        }
+    };
+
+    cell.appendChild(pbEdit);
 
 }
 
-
-let sailboats = []
-async function fetchAllSailboats()
+async function deleteSailboat(sailboat)
 {
-    const colhead = document.getElementById("colhead")
-    tblSailboats.innerHTML = ""
-    tblSailboats.appendChild(colhead)
-    sailboats = await fetchAnyUrl(urlAllSailboats)
-    sailboats.forEach(createTable)
+    try{
+        const urlDelete = url + "/" + sailboat.id
+        console.log(url)
+        await postObjectAsJson(urlDelete, sailboat, 'DELETE')
+
+    } catch (error)
+    {
+        alert(error.message);
+        console.log(error)
+    }
 }
 
-
-document.addEventListener("DOMContentLoaded", () => {fetchAllSailboats()})
+let sailboatArr = []
+async function fetchSailboats()
+{
+    const colhead = document.getElementById("colhead");
+    tableSailboats.innerHTML = "";
+    tableSailboats.appendChild(colhead);
+    sailboatArr = await fetchAnyUrl(sailboatsListUrl);
+    sailboatArr.forEach(createRow);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-    const body = document.body;
-    const darkModeToggle = document.createElement('div');
-    darkModeToggle.className = 'dark-mode-toggle';
-    darkModeToggle.innerHTML = '🌙';
-
-    darkModeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-mode');
-    });
-
-    document.body.appendChild(darkModeToggle);
+    fetchSailboats();
 });
