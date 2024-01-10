@@ -1,0 +1,70 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #282c35; /* Dark background color */
+    color: #ffffff; /* White text color */
+    transition: background-color 0.3s ease; /* Smooth transition for dark mode */
+}
+
+.div1 {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #1e1e1e; /* Darker container background color */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease; /* Smooth transition for dark mode */
+}
+
+h1 {
+    color: #61dafb; /* Blue header color in light mode */
+    transition: color 0.3s ease; /* Smooth transition for dark mode */
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #333; /* Dark table background color */
+    transition: background-color 0.3s ease; /* Smooth transition for dark mode */
+}
+
+table, th, td {
+    border: 1px solid #444;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+#colhead {
+    background-color: #333; /* Dark header row color */
+    color: #fff;
+}
+
+/* Dark mode toggle button */
+.dark-mode-toggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #61dafb; /* Blue color in light mode */
+}
+
+/* Styles for dark mode */
+.dark-mode {
+    background-color: #fff;
+    color: #000;
+}
+
+.dark-mode .div1,
+.dark-mode .table {
+    background-color: #ddd; /* Lighter background color in dark mode */
+}
+
+.dark-mode h1 {
+    color: #000; /* Black header color in dark mode */
+}

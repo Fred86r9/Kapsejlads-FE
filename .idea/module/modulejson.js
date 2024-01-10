@@ -1,6 +1,6 @@
 function fetchAnyUrl(url)
 {
-    console.log("bla bla fetch")
+    console.log("fetch any url" + url)
     return fetch(url).then(response => response.json())
 }
 
